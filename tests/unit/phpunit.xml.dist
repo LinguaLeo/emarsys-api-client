@@ -20,9 +20,8 @@
         timeoutForSmallTests="1"
         timeoutForMediumTests="10"
         timeoutForLargeTests="60"
-        strict="true"
         verbose="false">
-    <testsuite name="Snowcap Emarsys Unit Tests">
+    <testsuite name="LinguaLeo Emarsys Unit Tests">
         <directory>.</directory>
     </testsuite>
     <filter>

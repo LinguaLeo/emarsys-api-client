@@ -23,7 +23,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->httpClient = $this->getMock('\LinguaLeo\EmarsysApiClient\Transport\HttpTransportInterface');
-        $this->client = new Client($this->httpClient, 'dummy-api-username', 'dummy-api-secret');
+        $this->client = new Client($this->httpClient, 'dummy-api-username', 'dummy-api-secret', 'https://suite9.emarsys.net/api/v2/');
     }
 
     public function testItAddsFieldsMapping()

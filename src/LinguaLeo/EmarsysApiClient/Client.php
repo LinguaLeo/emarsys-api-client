@@ -20,14 +20,23 @@ class Client
     const LAUNCH_STATUS_ERROR = -10;
 
     /**
+     * Base API URL
+     * For instance, "https://suite9.emarsys.net/api/v2/"
+     *
      * @var string
      */
-    private $baseUrl = 'https://suite6.emarsys.net/api/v2/';
+    private $baseUrl;
+
     /**
+     * Emarsys API user name
+     *
      * @var string
      */
     private $username;
+
     /**
+     * Emarsys API password
+     *
      * @var string
      */
     private $secret;
@@ -56,7 +65,7 @@ class Client
      * @param HttpTransportInterface $transport HTTP client implementation
      * @param string $username The username requested by the Emarsys API
      * @param string $secret The secret requested by the Emarsys API
-     * @param string $baseUrl Overrides the default baseUrl if needed
+     * @param string $baseUrl Your API baseUrl, such as "https://suite9.emarsys.net/api/v2/"
      * @param array $fieldsMap Overrides the default fields mapping if needed
      * @param array $choicesMap Overrides the default choices mapping if needed
      */
@@ -64,7 +73,7 @@ class Client
         HttpTransportInterface $transport,
         $username,
         $secret,
-        $baseUrl = null,
+        $baseUrl,
         $fieldsMap = [],
         $choicesMap = []
     ) {
@@ -73,10 +82,7 @@ class Client
         $this->secret = $secret;
         $this->fieldsMapping = $fieldsMap;
         $this->choicesMapping = $choicesMap;
-
-        if (null !== $baseUrl) {
-            $this->baseUrl = $baseUrl;
-        }
+        $this->baseUrl = $baseUrl;
 
         if (empty($this->fieldsMapping)) {
             $this->fieldsMapping = $this->parseIniFile('fields.ini');

@@ -14,12 +14,16 @@ class EmarsysTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        if (!defined('EMARSYS_API_USERNAME') || !defined('EMARSYS_API_SECRET')) {
+        if (
+            !defined('EMARSYS_API_USERNAME') ||
+            !defined('EMARSYS_API_SECRET') ||
+            !defined('EMARSYS_API_URL')
+        ) {
             $this->markTestSkipped('No Emarsys credentials are specified');
         }
 
         $httpClient = new CurlTransport();
-        $this->client = new Client($httpClient, EMARSYS_API_USERNAME, EMARSYS_API_SECRET);
+        $this->client = new Client($httpClient, EMARSYS_API_USERNAME, EMARSYS_API_SECRET, EMARSYS_API_URL);
 
         $connectionTestResponse = $this->client->getLanguages();
 
