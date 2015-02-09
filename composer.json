@@ -1,0 +1,23 @@
+{
+    "name": "lingualeo/emarsys-api-client",
+    "description": "Emarsys API client",
+    "require": {
+        "php": ">=5.3.3",
+        "lib-curl": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "LinguaLeo\\Emarsys": "src/"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dmitry Ulyanov",
+            "email": "d.ulyanov@lingualeo.com"
+        }
+    ]
+}
