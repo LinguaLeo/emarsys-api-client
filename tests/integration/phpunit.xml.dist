@@ -20,13 +20,13 @@
         timeoutForSmallTests="1"
         timeoutForMediumTests="10"
         timeoutForLargeTests="60"
-        strict="true"
         verbose="false">
-    <testsuite name="Snowcap Emarsys Integration Tests">
+    <testsuite name="LinguaLeo Emarsys Integration Tests">
         <directory>.</directory>
     </testsuite>
     <php>
         <const name="EMARSYS_API_USERNAME" value="your_username"/>
         <const name="EMARSYS_API_SECRET" value="your_secret"/>
+        <const name="EMARSYS_API_URL" value="https://suite9.emarsys.net/api/v2/"/>
     </php>
 </phpunit>
