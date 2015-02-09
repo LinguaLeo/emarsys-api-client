@@ -3,8 +3,8 @@
 namespace LinguaLeo\EmarsysApiClient;
 
 /**
- * @covers \LinguaLeo\Emarsys\Client
- * @uses   \LinguaLeo\Emarsys\Response
+ * @covers \LinguaLeo\EmarsysApiClient\Client
+ * @uses   \LinguaLeo\EmarsysApiClient\Response
  */
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->httpClient = $this->getMock('\LinguaLeo\Emarsys\HttpClient');
+        $this->httpClient = $this->getMock('\LinguaLeo\EmarsysApiClient\HttpClient');
         $this->client = new Client($this->httpClient, 'dummy-api-username', 'dummy-api-secret');
     }
 
@@ -217,7 +217,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $response = $this->client->getContactData([]);
 
-        $this->assertInstanceOf('\LinguaLeo\Emarsys\Response', $response);
+        $this->assertInstanceOf('\LinguaLeo\EmarsysApiClient\Response', $response);
     }
 
     public function testItCreatesContact()
@@ -233,7 +233,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         ];
         $response = $this->client->createContact($data);
 
-        $this->assertInstanceOf('\LinguaLeo\Emarsys\Response', $response);
+        $this->assertInstanceOf('\LinguaLeo\EmarsysApiClient\Response', $response);
     }
 
     /**

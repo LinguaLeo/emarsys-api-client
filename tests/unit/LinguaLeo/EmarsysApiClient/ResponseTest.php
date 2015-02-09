@@ -3,7 +3,7 @@
 namespace LinguaLeo\EmarsysApiClient;
 
 /**
- * @covers \LinguaLeo\Emarsys\Response
+ * @covers \LinguaLeo\EmarsysApiClient\Response
  */
 class ResponseTest extends \PHPUnit_Framework_TestCase
 {

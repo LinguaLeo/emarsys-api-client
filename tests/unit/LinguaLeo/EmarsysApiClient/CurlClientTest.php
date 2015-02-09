@@ -3,7 +3,7 @@
 namespace LinguaLeo\EmarsysApiClient;
 
 /**
- * @covers \LinguaLeo\Emarsys\CurlClient
+ * @covers \LinguaLeo\EmarsysApiClient\CurlClient
  */
 class CurlClientTest extends \PHPUnit_Framework_TestCase
 {
