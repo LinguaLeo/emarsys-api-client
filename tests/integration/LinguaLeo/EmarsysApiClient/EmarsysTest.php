@@ -3,7 +3,7 @@
 namespace LinguaLeo\EmarsysApiClient;
 
 use LinguaLeo\EmarsysApiClient\Client;
-use LinguaLeo\EmarsysApiClient\CurlClient;
+use LinguaLeo\EmarsysApiClient\Transport\CurlTransport;
 
 class EmarsysTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +18,7 @@ class EmarsysTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('No Emarsys credentials are specified');
         }
 
-        $httpClient = new CurlClient();
+        $httpClient = new CurlTransport();
         $this->client = new Client($httpClient, EMARSYS_API_USERNAME, EMARSYS_API_SECRET);
 
         $connectionTestResponse = $this->client->getLanguages();

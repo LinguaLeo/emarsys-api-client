@@ -1,24 +1,24 @@
 <?php
 
-namespace LinguaLeo\EmarsysApiClient;
+namespace LinguaLeo\EmarsysApiClient\Transport;
 
 /**
- * @covers \LinguaLeo\EmarsysApiClient\CurlClient
+ * @covers \LinguaLeo\EmarsysApiClient\Transport\CurlTransport
  */
-class CurlClientTest extends \PHPUnit_Framework_TestCase
+class CurlTransportTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CurlClient
+     * @var CurlTransport
      */
     private $client;
 
     protected function setUp()
     {
-        $this->client = new CurlClient();
+        $this->client = new CurlTransport();
     }
 
     /**
-     * @expectedException \LinguaLeo\EmarsysApiClient\Exception\ClientException
+     * @expectedException \LinguaLeo\EmarsysApiClient\Exceptions\ClientException
      */
     public function testRequestToNonExistingHostFails()
     {

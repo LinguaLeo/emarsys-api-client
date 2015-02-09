@@ -2,8 +2,9 @@
 
 namespace LinguaLeo\EmarsysApiClient;
 
-use LinguaLeo\EmarsysApiClient\Exception\ClientException;
-use LinguaLeo\EmarsysApiClient\Exception\ServerException;
+use LinguaLeo\EmarsysApiClient\Exceptions\ClientException;
+use LinguaLeo\EmarsysApiClient\Exceptions\ServerException;
+use LinguaLeo\EmarsysApiClient\Transport\HttpTransportInterface;
 
 class Client
 {
@@ -32,9 +33,9 @@ class Client
     private $secret;
 
     /**
-     * @var HttpClient
+     * @var HttpTransportInterface
      */
-    private $client;
+    private $transport;
 
     /**
      * @var array
@@ -52,7 +53,7 @@ class Client
     private $systemFields = ['key_id', 'id'];
 
     /**
-     * @param HttpClient $client HTTP client implementation
+     * @param HttpTransportInterface $transport HTTP client implementation
      * @param string $username The username requested by the Emarsys API
      * @param string $secret The secret requested by the Emarsys API
      * @param string $baseUrl Overrides the default baseUrl if needed
@@ -60,14 +61,14 @@ class Client
      * @param array $choicesMap Overrides the default choices mapping if needed
      */
     public function __construct(
-        HttpClient $client,
+        HttpTransportInterface $transport,
         $username,
         $secret,
         $baseUrl = null,
         $fieldsMap = [],
         $choicesMap = []
     ) {
-        $this->client = $client;
+        $this->transport = $transport;
         $this->username = $username;
         $this->secret = $secret;
         $this->fieldsMapping = $fieldsMap;
@@ -135,7 +136,7 @@ class Client
      *
      * @param string $field
      * @return int
-     * @throws Exception\ClientException
+     * @throws Exceptions\ClientException
      */
     public function getFieldId($field)
     {
@@ -172,7 +173,7 @@ class Client
      *
      * @param string|int $field
      * @param string|int $choice
-     * @throws Exception\ClientException
+     * @throws Exceptions\ClientException
      * @return int
      */
     public function getChoiceId($field, $choice)
@@ -196,7 +197,7 @@ class Client
      *
      * @param string|int $field
      * @param int $choiceId
-     * @throws Exception\ClientException
+     * @throws Exceptions\ClientException
      * @return string|int
      */
     public function getChoiceName($field, $choiceId)
@@ -223,7 +224,7 @@ class Client
      */
     public function getConditions()
     {
-        return $this->send(HttpClient::GET, 'condition');
+        return $this->send(HttpTransportInterface::METHOD_GET, 'condition');
     }
 
     /**
@@ -239,7 +240,7 @@ class Client
      */
     public function createContact(array $data)
     {
-        return $this->send(HttpClient::POST, 'contact', $this->mapFieldsToIds($data));
+        return $this->send(HttpTransportInterface::METHOD_POST, 'contact', $this->mapFieldsToIds($data));
     }
 
     /**
@@ -250,7 +251,7 @@ class Client
      */
     public function updateContact(array $data)
     {
-        return $this->send(HttpClient::PUT, 'contact', $this->mapFieldsToIds($data));
+        return $this->send(HttpTransportInterface::METHOD_PUT, 'contact', $this->mapFieldsToIds($data));
     }
 
     /**
@@ -258,12 +259,12 @@ class Client
      *
      * @param string $fieldId
      * @param string $fieldValue
-     * @throws Exception\ClientException
+     * @throws Exceptions\ClientException
      * @return Response
      */
     public function getContactId($fieldId, $fieldValue)
     {
-        $response = $this->send(HttpClient::GET, sprintf('contact/%s=%s', $fieldId, $fieldValue));
+        $response = $this->send(HttpTransportInterface::METHOD_GET, sprintf('contact/%s=%s', $fieldId, $fieldValue));
 
         $data = $response->getData();
 
@@ -282,7 +283,7 @@ class Client
      */
     public function getContactChanges(array $data)
     {
-        return $this->send(HttpClient::POST, 'contact/getchanges', $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, 'contact/getchanges', $data);
     }
 
     /**
@@ -293,7 +294,7 @@ class Client
      */
     public function getContactHistory(array $data)
     {
-        return $this->send(HttpClient::POST, 'contact/getcontacthistory', $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, 'contact/getcontacthistory', $data);
     }
 
     /**
@@ -313,7 +314,7 @@ class Client
      */
     public function getContactData(array $data)
     {
-        return $this->send(HttpClient::POST, 'contact/getdata', $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, 'contact/getdata', $data);
     }
 
     /**
@@ -324,7 +325,7 @@ class Client
      */
     public function getContactRegistrations(array $data)
     {
-        return $this->send(HttpClient::POST, 'contact/getregistrations', $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, 'contact/getregistrations', $data);
     }
 
     /**
@@ -335,7 +336,7 @@ class Client
      */
     public function getContactList(array $data)
     {
-        return $this->send(HttpClient::GET, 'contactlist', $data);
+        return $this->send(HttpTransportInterface::METHOD_GET, 'contactlist', $data);
     }
 
     /**
@@ -346,7 +347,7 @@ class Client
      */
     public function createContactList(array $data)
     {
-        return $this->send(HttpClient::POST, 'contactlist', $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, 'contactlist', $data);
     }
 
     /**
@@ -358,7 +359,7 @@ class Client
      */
     public function addContactsToContactList($listId, array $data)
     {
-        return $this->send(HttpClient::POST, sprintf('contactlist/%s/add', $listId), $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, sprintf('contactlist/%s/add', $listId), $data);
     }
 
     /**
@@ -370,7 +371,7 @@ class Client
      */
     public function removeContactsFromContactList($listId, array $data)
     {
-        return $this->send(HttpClient::POST, sprintf('contactlist/%s/delete', $listId), $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, sprintf('contactlist/%s/delete', $listId), $data);
     }
 
     /**
@@ -394,7 +395,7 @@ class Client
             $url = sprintf('%s/%s', $url, http_build_query($data));
         }
 
-        return $this->send(HttpClient::GET, $url);
+        return $this->send(HttpTransportInterface::METHOD_GET, $url);
     }
 
     /**
@@ -420,7 +421,7 @@ class Client
      */
     public function createEmail(array $data)
     {
-        return $this->send(HttpClient::POST, 'email', $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, 'email', $data);
     }
 
     /**
@@ -432,7 +433,7 @@ class Client
      */
     public function getEmail($emailId, array $data)
     {
-        return $this->send(HttpClient::GET, sprintf('email/%s', $emailId), $data);
+        return $this->send(HttpTransportInterface::METHOD_GET, sprintf('email/%s', $emailId), $data);
     }
 
     /**
@@ -444,7 +445,7 @@ class Client
      */
     public function launchEmail($emailId, array $data)
     {
-        return $this->send(HttpClient::POST, sprintf('email/%s/launch', $emailId), $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, sprintf('email/%s/launch', $emailId), $data);
     }
 
     /**
@@ -456,7 +457,7 @@ class Client
      */
     public function previewEmail($emailId, array $data)
     {
-        return $this->send(HttpClient::POST, sprintf('email/%s/launch', $emailId), $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, sprintf('email/%s/launch', $emailId), $data);
     }
 
     /**
@@ -468,7 +469,7 @@ class Client
      */
     public function getEmailResponseSummary($emailId, array $data)
     {
-        return $this->send(HttpClient::POST, sprintf('email/%s/responsesummary', $emailId), $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, sprintf('email/%s/responsesummary', $emailId), $data);
     }
 
     /**
@@ -480,7 +481,7 @@ class Client
      */
     public function sendEmailTest($emailId, array $data)
     {
-        return $this->send(HttpClient::POST, sprintf('email/%s/sendtestmail', $emailId), $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, sprintf('email/%s/sendtestmail', $emailId), $data);
     }
 
     /**
@@ -492,7 +493,7 @@ class Client
      */
     public function getEmailUrl($emailId, array $data)
     {
-        return $this->send(HttpClient::POST, sprintf('email/%s/url', $emailId), $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, sprintf('email/%s/url', $emailId), $data);
     }
 
     /**
@@ -503,7 +504,7 @@ class Client
      */
     public function getEmailDeliveryStatus(array $data)
     {
-        return $this->send(HttpClient::POST, 'email/getdeliverystatus', $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, 'email/getdeliverystatus', $data);
     }
 
     /**
@@ -514,7 +515,7 @@ class Client
      */
     public function getEmailLaunches(array $data)
     {
-        return $this->send(HttpClient::GET, 'email/getlaunchesofemail', $data);
+        return $this->send(HttpTransportInterface::METHOD_GET, 'email/getlaunchesofemail', $data);
     }
 
     /**
@@ -525,7 +526,7 @@ class Client
      */
     public function getEmailResponses(array $data)
     {
-        return $this->send(HttpClient::POST, 'email/getresponses', $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, 'email/getresponses', $data);
     }
 
     /**
@@ -536,7 +537,7 @@ class Client
      */
     public function getEmailCategories(array $data)
     {
-        return $this->send(HttpClient::GET, 'emailcategory', $data);
+        return $this->send(HttpTransportInterface::METHOD_GET, 'emailcategory', $data);
     }
 
     /**
@@ -547,7 +548,7 @@ class Client
      */
     public function getEvents(array $data)
     {
-        return $this->send(HttpClient::GET, 'event', $data);
+        return $this->send(HttpTransportInterface::METHOD_GET, 'event', $data);
     }
 
     /**
@@ -559,7 +560,7 @@ class Client
      */
     public function triggerEvent($eventId, array $data)
     {
-        return $this->send(HttpClient::POST, sprintf('event/%s/trigger', $eventId), $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, sprintf('event/%s/trigger', $eventId), $data);
     }
 
     /**
@@ -570,7 +571,7 @@ class Client
      */
     public function getExportStatus(array $data)
     {
-        return $this->send(HttpClient::GET, 'export', $data);
+        return $this->send(HttpTransportInterface::METHOD_GET, 'export', $data);
     }
 
     /**
@@ -580,7 +581,7 @@ class Client
      */
     public function getFields()
     {
-        return $this->send(HttpClient::GET, 'field');
+        return $this->send(HttpTransportInterface::METHOD_GET, 'field');
     }
 
     /**
@@ -591,7 +592,7 @@ class Client
      */
     public function getFieldChoices($fieldId)
     {
-        return $this->send(HttpClient::GET, sprintf('field/%s/choice', $this->getFieldId($fieldId)));
+        return $this->send(HttpTransportInterface::METHOD_GET, sprintf('field/%s/choice', $this->getFieldId($fieldId)));
     }
 
     /**
@@ -602,7 +603,7 @@ class Client
      */
     public function getFiles(array $data)
     {
-        return $this->send(HttpClient::GET, 'file', $data);
+        return $this->send(HttpTransportInterface::METHOD_GET, 'file', $data);
     }
 
     /**
@@ -613,7 +614,7 @@ class Client
      */
     public function uploadFile(array $data)
     {
-        return $this->send(HttpClient::POST, 'file', $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, 'file', $data);
     }
 
     /**
@@ -624,7 +625,7 @@ class Client
      */
     public function getSegments(array $data)
     {
-        return $this->send(HttpClient::GET, 'filter', $data);
+        return $this->send(HttpTransportInterface::METHOD_GET, 'filter', $data);
     }
 
     /**
@@ -635,7 +636,7 @@ class Client
      */
     public function getFolders(array $data)
     {
-        return $this->send(HttpClient::GET, 'folder', $data);
+        return $this->send(HttpTransportInterface::METHOD_GET, 'folder', $data);
     }
 
     /**
@@ -646,7 +647,7 @@ class Client
      */
     public function getForms(array $data)
     {
-        return $this->send(HttpClient::GET, 'form', $data);
+        return $this->send(HttpTransportInterface::METHOD_GET, 'form', $data);
     }
 
     /**
@@ -656,7 +657,7 @@ class Client
      */
     public function getLanguages()
     {
-        return $this->send(HttpClient::GET, 'language');
+        return $this->send(HttpTransportInterface::METHOD_GET, 'language');
     }
 
     /**
@@ -666,7 +667,7 @@ class Client
      */
     public function getSources()
     {
-        return $this->send(HttpClient::GET, 'source');
+        return $this->send(HttpTransportInterface::METHOD_GET, 'source');
     }
 
     /**
@@ -677,7 +678,7 @@ class Client
      */
     public function deleteSource($sourceId)
     {
-        return $this->send(HttpClient::DELETE, sprintf('source/%s/delete', $sourceId));
+        return $this->send(HttpTransportInterface::METHOD_DELETE, sprintf('source/%s/delete', $sourceId));
     }
 
     /**
@@ -688,7 +689,7 @@ class Client
      */
     public function createSource(array $data)
     {
-        return $this->send(HttpClient::POST, 'source/create', $data);
+        return $this->send(HttpTransportInterface::METHOD_POST, 'source/create', $data);
     }
 
     /**
@@ -704,7 +705,7 @@ class Client
         $uri = $this->baseUrl . $uri;
 
         try {
-            $responseJson = $this->client->send($method, $uri, $headers, $body);
+            $responseJson = $this->transport->send($method, $uri, $headers, $body);
         } catch (\Exception $e) {
             throw new ServerException($e->getMessage());
         }

@@ -1,10 +1,10 @@
 <?php
 
-namespace LinguaLeo\EmarsysApiClient;
+namespace LinguaLeo\EmarsysApiClient\Transport;
 
-use LinguaLeo\EmarsysApiClient\Exception\ClientException;
+use LinguaLeo\EmarsysApiClient\Exceptions\ClientException;
 
-class CurlClient implements HttpClient
+class CurlTransport implements HttpTransportInterface
 {
     /**
      * @param string $method
@@ -19,7 +19,7 @@ class CurlClient implements HttpClient
         $ch = curl_init();
         $uri = $this->updateUri($method, $uri, $body);
 
-        if ($method != self::GET) {
+        if ($method != self::METHOD_GET) {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
         }
@@ -47,7 +47,7 @@ class CurlClient implements HttpClient
      */
     private function updateUri($method, $uri, array $body)
     {
-        if (self::GET == $method) {
+        if (self::METHOD_GET == $method) {
             $uri .= '/' . http_build_query($body);
         }
 

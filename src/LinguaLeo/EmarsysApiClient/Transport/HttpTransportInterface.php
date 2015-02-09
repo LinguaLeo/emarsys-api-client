@@ -1,13 +1,13 @@
 <?php
 
-namespace LinguaLeo\EmarsysApiClient;
+namespace LinguaLeo\EmarsysApiClient\Transport;
 
-interface HttpClient
+interface HttpTransportInterface
 {
-    const GET = 'GET';
-    const POST = 'POST';
-    const PUT = 'PUT';
-    const DELETE = 'DELETE';
+    const METHOD_GET = 'GET';
+    const METHOD_POST = 'POST';
+    const METHOD_PUT = 'PUT';
+    const METHOD_DELETE = 'DELETE';
 
     /**
      * @param string $method

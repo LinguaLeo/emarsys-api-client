@@ -2,6 +2,8 @@
 
 namespace LinguaLeo\EmarsysApiClient;
 
+use LinguaLeo\EmarsysApiClient\Transport\HttpTransportInterface;
+
 /**
  * @covers \LinguaLeo\EmarsysApiClient\Client
  * @uses   \LinguaLeo\EmarsysApiClient\Response
@@ -14,13 +16,13 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     private $client;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|HttpClient
+     * @var \PHPUnit_Framework_MockObject_MockObject|HttpTransportInterface
      */
     private $httpClient;
 
     protected function setUp()
     {
-        $this->httpClient = $this->getMock('\LinguaLeo\EmarsysApiClient\HttpClient');
+        $this->httpClient = $this->getMock('\LinguaLeo\EmarsysApiClient\Transport\HttpTransportInterface');
         $this->client = new Client($this->httpClient, 'dummy-api-username', 'dummy-api-secret');
     }
 
@@ -93,7 +95,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \LinguaLeo\EmarsysApiClient\Exception\ClientException
+     * @expectedException \LinguaLeo\EmarsysApiClient\Exceptions\ClientException
      * @expectedExceptionMessage Unrecognized field name "non-existing-field-name"
      */
     public function testItThrowsAnExceptionIfFieldDoesNotExist()
@@ -102,7 +104,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \LinguaLeo\EmarsysApiClient\Exception\ClientException
+     * @expectedException \LinguaLeo\EmarsysApiClient\Exceptions\ClientException
      * @expectedExceptionMessage Unrecognized field "non-existing-field-name" for choice "choice-name"
      */
     public function testItThrowsAnExceptionIfChoiceFieldDoesNotExist()
@@ -111,7 +113,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \LinguaLeo\EmarsysApiClient\Exception\ClientException
+     * @expectedException \LinguaLeo\EmarsysApiClient\Exceptions\ClientException
      * @expectedExceptionMessage Unrecognized choice "choice-name" for field "myCustomField"
      */
     public function testItThrowsAnExceptionIfChoiceDoesNotExist()

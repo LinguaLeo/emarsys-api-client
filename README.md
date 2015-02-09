@@ -33,7 +33,7 @@ To use the client, you need to instantiate a new one with your credentials. You 
 define('EMARSYS_API_USERNAME', 'your_username');
 define('EMARSYS_API_SECRET', 'your_secret');
 
-$httpClient = new CurlClient();
+$httpClient = new CurlTransport();
 $client = new Client($httpClient, EMARSYS_API_USERNAME, EMARSYS_API_SECRET);
 ```
 

@@ -8,7 +8,7 @@ namespace LinguaLeo\EmarsysApiClient;
 class ResponseTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException \LinguaLeo\EmarsysApiClient\Exception\ClientException
+     * @expectedException \LinguaLeo\EmarsysApiClient\Exceptions\ClientException
      * @expectedExceptionMessage Invalid result structure
      */
     public function testItThrowsClientException()

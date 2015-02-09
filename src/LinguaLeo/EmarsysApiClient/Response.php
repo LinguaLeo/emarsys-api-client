@@ -2,7 +2,7 @@
 
 namespace LinguaLeo\EmarsysApiClient;
 
-use LinguaLeo\EmarsysApiClient\Exception\ClientException;
+use LinguaLeo\EmarsysApiClient\Exceptions\ClientException;
 
 class Response
 {
