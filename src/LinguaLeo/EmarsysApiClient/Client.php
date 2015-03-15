@@ -59,7 +59,7 @@ class Client
     /**
      * @var array
      */
-    private $systemFields = ['key_id', 'id'];
+    private $systemFields = ['key_id'];
 
     /**
      * @param HttpTransportInterface $transport HTTP client implementation
