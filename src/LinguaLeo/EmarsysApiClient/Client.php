@@ -234,7 +234,7 @@ class Client
     }
 
     /**
-     * Creates one or more new contacts/recipients.
+     * Creates one new contact/recipients.
      * Example :
      *  $data = array(
      *      'key_id' => '3',
@@ -250,7 +250,42 @@ class Client
     }
 
     /**
-     * Updates one or more contacts/recipients, identified by an external ID.
+     * Creates multiple new contacts/recipients.
+     * Example :
+     *  $data = array(
+     *      'key_id' => '3',
+     *      'contacts' => array(
+     *          array(
+     *              '3' => 'recipient@example.com',
+     *              'source_id' => '123',
+     *          ),
+     *          array(
+     *              '3' => 'recipient2@example.com',
+     *              'source_id' => '321',
+     *          ),
+     *      )
+     *  );
+     *
+     * @param array $data
+     * @return Response
+     * @throws ClientException
+     * @throws ServerException
+     */
+    public function createMultipleContacts(array $data)
+    {
+        if (!isset($data['contacts'])) {
+            throw new ClientException("Missing `contacts` parameter in request");
+        }
+
+        foreach ($data['contacts'] as &$contactData) {
+            $contactData = $this->mapFieldsToIds($contactData);
+        }
+
+        return $this->send(HttpTransportInterface::METHOD_POST, 'contact', $data);
+    }
+
+    /**
+     * Updates one contact/recipient, identified by an external ID.
      *
      * @param array $data
      * @return Response
@@ -258,6 +293,41 @@ class Client
     public function updateContact(array $data)
     {
         return $this->send(HttpTransportInterface::METHOD_PUT, 'contact', $this->mapFieldsToIds($data));
+    }
+
+    /**
+     * Updates multiple contacts/recipients.
+     * Example :
+     *  $data = array(
+     *      'key_id' => '3',
+     *      'contacts' => array(
+     *          array(
+     *              '3' => 'recipient@example.com',
+     *              'source_id' => '123',
+     *          ),
+     *          array(
+     *              '3' => 'recipient2@example.com',
+     *              'source_id' => '321',
+     *          ),
+     *      )
+     *  );
+     *
+     * @param array $data
+     * @throws ClientException
+     * @throws ServerException
+     * @return Response
+     */
+    public function updateMultipleContacts(array $data)
+    {
+        if (!isset($data['contacts'])) {
+            throw new ClientException("Missing `contacts` parameter in request");
+        }
+
+        foreach ($data['contacts'] as &$contactData) {
+            $contactData = $this->mapFieldsToIds($contactData);
+        }
+
+        return $this->send(HttpTransportInterface::METHOD_PUT, 'contact', $data);
     }
 
     /**
