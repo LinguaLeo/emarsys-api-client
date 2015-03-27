@@ -798,8 +798,9 @@ class Client
      */
     private function getAuthenticationSignature()
     {
+        // Important: Emarsys requires Europe/Vienna timezone
+        $created = new \DateTime('now', new \DateTimeZone('Europe/Vienna'));
         // the current time encoded as an ISO 8601 date string
-        $created = new \DateTime();
         $iso8601 = $created->format(\DateTime::ISO8601);
         // the md5 of a random string . e.g. a timestamp
         $nonce = md5($created->modify('next friday')->getTimestamp());
