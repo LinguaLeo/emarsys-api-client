@@ -2,6 +2,10 @@
 
 namespace LinguaLeo\EmarsysApiClient\Transport;
 
+/**
+ * Interface HttpTransportInterface
+ * @package LinguaLeo\EmarsysApiClient\Transport
+ */
 interface HttpTransportInterface
 {
     const METHOD_GET = 'GET';

@@ -4,8 +4,35 @@ namespace LinguaLeo\EmarsysApiClient\Transport;
 
 use LinguaLeo\EmarsysApiClient\Exceptions\ClientException;
 
+/**
+ * Class CurlTransport
+ * @package LinguaLeo\EmarsysApiClient\Transport
+ */
 class CurlTransport implements HttpTransportInterface
 {
+    /**
+     * Connection timeout, seconds
+     * @var int
+     */
+    protected $connectionTimeout = 60;
+
+    /**
+     * Operation timeout, seconds
+     * @var int
+     */
+    protected $operationTimeout = 60;
+
+    /**
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        if (isset($options['timeout'])) {
+            $this->connectionTimeout = $options['timeout'];
+            $this->operationTimeout = $options['timeout'];
+        }
+    }
+
     /**
      * @param string $method
      * @param string $uri
@@ -27,6 +54,8 @@ class CurlTransport implements HttpTransportInterface
         curl_setopt($ch, CURLOPT_URL, $uri);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->connectionTimeout);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $this->operationTimeout);
 
         $output = curl_exec($ch);
 

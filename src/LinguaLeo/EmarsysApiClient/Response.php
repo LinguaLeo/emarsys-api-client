@@ -4,6 +4,10 @@ namespace LinguaLeo\EmarsysApiClient;
 
 use LinguaLeo\EmarsysApiClient\Exceptions\ClientException;
 
+/**
+ * Class Response
+ * @package LinguaLeo\EmarsysApiClient
+ */
 class Response
 {
     const REPLY_CODE_OK = 0;

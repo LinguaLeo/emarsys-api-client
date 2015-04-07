@@ -6,6 +6,10 @@ use LinguaLeo\EmarsysApiClient\Exceptions\ClientException;
 use LinguaLeo\EmarsysApiClient\Exceptions\ServerException;
 use LinguaLeo\EmarsysApiClient\Transport\HttpTransportInterface;
 
+/**
+ * Class Client
+ * @package LinguaLeo\EmarsysApiClient
+ */
 class Client
 {
     const EMAIL_STATUS_IN_DESIGN = 1;
