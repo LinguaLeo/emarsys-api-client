@@ -505,6 +505,27 @@ class Client
     }
 
     /**
+     * Updates an email in eMarketing Suite and assigns it the respective parameters.
+     * Example :
+     *  $data = array(
+     *      'language' => 'en',
+     *      'name' => 'test api 010',
+     *      'subject' => 'subject here',
+     *      'html_source' => '<html>Hello $First Name$,... </html>',
+     *      'text_source' => 'email text',
+     *      'additional_linktracking_parameters' => '',
+     *  );
+     *
+     * @param string $emailId
+     * @param array $data
+     * @return Response
+     */
+    public function updateEmail($emailId, array $data)
+    {
+        return $this->send(HttpTransportInterface::METHOD_POST, sprintf('email/%s/patch', $emailId), $data);
+    }
+
+    /**
      * Returns the attributes of an email and the personalized text and HTML source.
      *
      * @param string $emailId
