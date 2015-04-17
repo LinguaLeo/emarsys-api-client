@@ -455,6 +455,36 @@ class Client
     }
 
     /**
+     * Returns a list of field values
+     * using $data as query
+     *
+     * Example :
+     *  $data = array(
+     *      '<field_id>' => <field_value>,
+     *      'limit' => '100',
+     *      'offset' => '0',
+     *      'excludeempty' => true,
+     *  );
+     *
+     * @param int|string $fieldId
+     * @param array $data
+     * @return Response
+     * @throws ServerException
+     */
+    public function listingContacts($fieldId, array $data = [])
+    {
+        return $this->send(
+            HttpTransportInterface::METHOD_GET,
+            sprintf(
+                'contact/query/return=%d%s',
+                $this->getFieldId($fieldId),
+                $data ? '&'.http_build_query($data) : ''
+            ),
+            $data
+        );
+    }
+
+    /**
      * Returns a list of emails.
      *
      * @param int|null $status
