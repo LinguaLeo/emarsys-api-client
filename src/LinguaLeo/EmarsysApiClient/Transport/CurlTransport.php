@@ -28,8 +28,7 @@ class CurlTransport implements HttpTransportInterface
     public function __construct(array $options = [])
     {
         if (isset($options['timeout'])) {
-            $this->connectionTimeout = $options['timeout'];
-            $this->operationTimeout = $options['timeout'];
+            $this->setTimeout($options['timeout']);
         }
     }
 
@@ -62,10 +61,39 @@ class CurlTransport implements HttpTransportInterface
         curl_close($ch);
 
         if (false == $output) {
-            throw new ClientException();
+            throw new ClientException("Operation timeout");
         }
 
         return $output;
+    }
+
+    /**
+     * @param int $timeout
+     * @return void
+     */
+    public function setTimeout($timeout)
+    {
+        $this->setOperationTimeout($timeout);
+        $this->setConnectionTimeout($timeout);
+    }
+
+
+    /**
+     * Set operation timeout, in seconds
+     * @param int $timeout
+     */
+    protected function setOperationTimeout($timeout)
+    {
+        $this->operationTimeout = $timeout;
+    }
+
+    /**
+     * Set connection timeout, in seconds
+     * @param int $timeout
+     */
+    protected function setConnectionTimeout($timeout)
+    {
+        $this->connectionTimeout = $timeout;
     }
 
     /**

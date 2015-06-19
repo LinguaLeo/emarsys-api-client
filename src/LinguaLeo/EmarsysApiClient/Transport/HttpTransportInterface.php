@@ -21,4 +21,10 @@ interface HttpTransportInterface
      * @return string
      */
     public function send($method, $uri, array $headers, array $body);
+
+    /**
+     * @param int $timeout
+     * @return void
+     */
+    public function setTimeout($timeout);
 }

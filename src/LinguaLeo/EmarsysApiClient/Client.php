@@ -824,6 +824,16 @@ class Client
     }
 
     /**
+     * Set connection/operation timeout in seconds
+     *
+     * @param int $timeout
+     */
+    public function setTimeout($timeout)
+    {
+        $this->transport->setTimeout($timeout);
+    }
+
+    /**
      * @param string $method
      * @param string $uri
      * @param array $body
