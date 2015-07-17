@@ -21,6 +21,10 @@ class CurlTransport implements HttpTransportInterface
      * @var int
      */
     protected $operationTimeout = 60;
+    /**
+     * @var array
+     */
+    protected $curlOpts = [];
 
     /**
      * @param array $options
@@ -29,6 +33,10 @@ class CurlTransport implements HttpTransportInterface
     {
         if (isset($options['timeout'])) {
             $this->setTimeout($options['timeout']);
+        }
+
+        if (isset($options['curl_opts'])) {
+            $this->setCurlOpts($options['curl_opts']);
         }
     }
 
@@ -50,6 +58,10 @@ class CurlTransport implements HttpTransportInterface
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
         }
 
+        if ($this->curlOpts && !curl_setopt_array($ch, $this->curlOpts)) {
+            throw new ClientException('Error while setting CURL options');
+        }
+
         curl_setopt($ch, CURLOPT_URL, $uri);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -61,7 +73,7 @@ class CurlTransport implements HttpTransportInterface
         curl_close($ch);
 
         if (false == $output) {
-            throw new ClientException("Operation timeout");
+            throw new ClientException('Operation timeout');
         }
 
         return $output;
@@ -94,6 +106,14 @@ class CurlTransport implements HttpTransportInterface
     protected function setConnectionTimeout($timeout)
     {
         $this->connectionTimeout = $timeout;
+    }
+
+    /**
+     * @param array $curlOpts
+     */
+    private function setCurlOpts(array $curlOpts)
+    {
+        $this->curlOpts = $curlOpts;
     }
 
     /**
