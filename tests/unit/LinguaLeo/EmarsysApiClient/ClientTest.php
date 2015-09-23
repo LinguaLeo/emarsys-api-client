@@ -2,6 +2,7 @@
 
 namespace LinguaLeo\EmarsysApiClient;
 
+use LinguaLeo\EmarsysApiClient\Model\HttpResponse;
 use LinguaLeo\EmarsysApiClient\Transport\HttpTransportInterface;
 
 /**
@@ -206,7 +207,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $response = $this->client->getContactId('3', 'sender@example.com');
 
-        $expectedData = json_decode($expectedResponse, true);
+        $expectedData = json_decode($expectedResponse->getBody(), true);
         $this->assertEquals($expectedData['data']['id'], $response);
     }
 
@@ -242,12 +243,12 @@ class ClientTest extends \PHPUnit_Framework_TestCase
      * Get a json test data and decode it
      *
      * @param string $fileName
-     * @return mixed
+     * @return HttpResponse
      */
     private function createExpectedResponse($fileName)
     {
         $fileContent = file_get_contents(__DIR__ . '/TestData/' . $fileName . '.json');
 
-        return $fileContent;
+        return new HttpResponse($fileContent);
     }
 }

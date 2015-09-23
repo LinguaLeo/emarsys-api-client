@@ -846,22 +846,23 @@ class Client
         $uri = $this->baseUrl . $uri;
 
         try {
-            $responseJson = $this->transport->send($method, $uri, $headers, $body);
+            $response = $this->transport->send($method, $uri, $headers, $body);
         } catch (\Exception $e) {
             throw new ServerException($e->getMessage());
         }
-
+        $responseJson = $response->getBody();
         $responseArray = json_decode($responseJson, true);
 
         if (is_null($responseArray)) {
             throw new ServerException(
                 sprintf(
-                    'Server json response could hot be decoded. Request: %s %s %s %s. Raw response: %s',
+                    'Server json response could hot be decoded. Request: %s %s %s %s. Raw response: %s, code: %d',
                     $method,
                     $uri,
                     print_r($headers, true),
                     $body,
-                    $responseJson
+                    $responseJson,
+                    $response->getCode()
                 )
             );
         }
