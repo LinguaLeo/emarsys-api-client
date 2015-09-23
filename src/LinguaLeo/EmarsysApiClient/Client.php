@@ -853,6 +853,19 @@ class Client
 
         $responseArray = json_decode($responseJson, true);
 
+        if (is_null($responseArray)) {
+            throw new ServerException(
+                sprintf(
+                    'Server json response could hot be decoded. Request: %s %s %s %s. Raw response: %s',
+                    $method,
+                    $uri,
+                    print_r($headers, true),
+                    $body,
+                    $responseJson
+                )
+            );
+        }
+
         return new Response($responseArray);
     }
 

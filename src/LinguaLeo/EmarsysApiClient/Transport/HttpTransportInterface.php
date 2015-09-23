@@ -2,6 +2,8 @@
 
 namespace LinguaLeo\EmarsysApiClient\Transport;
 
+use LinguaLeo\EmarsysApiClient\Model\HttpResponse;
+
 /**
  * Interface HttpTransportInterface
  * @package LinguaLeo\EmarsysApiClient\Transport
@@ -18,7 +20,7 @@ interface HttpTransportInterface
      * @param string $uri
      * @param string[] $headers
      * @param array $body
-     * @return string
+     * @return HttpResponse
      */
     public function send($method, $uri, array $headers, array $body);
 

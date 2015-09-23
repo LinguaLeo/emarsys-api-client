@@ -29,6 +29,8 @@ class CurlTransportTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->client->send('GET', 'http://google.com', [], ['foo' => 'bar']);
 
-        $this->assertContains('<HTML', $result);
+        $this->assertContains('<HTML', $result->getBody());
+        $this->assertInternalType('integer', $result->getCode());
+        $this->assertEquals([], $result->getHeaders());
     }
 }
