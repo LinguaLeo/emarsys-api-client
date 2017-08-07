@@ -489,9 +489,11 @@ class Client
      *
      * @param int|null $status
      * @param int|null $contactList
+     * @param \DateTime|null $fromdate
+     * @param \DateTime|null $todate
      * @return Response
      */
-    public function getEmails($status = null, $contactList = null)
+    public function getEmails($status = null, $contactList = null, \DateTime $fromdate = null, \DateTime $todate = null)
     {
         $data = [];
         if (null !== $status) {
@@ -499,6 +501,12 @@ class Client
         }
         if (null !== $contactList) {
             $data['contactlist'] = $contactList;
+        }
+        if(null !== $fromdate) {
+            $data['fromdate'] = $fromdate->format('Y-m-d');
+        }
+        if(null !== $todate) {
+            $data['todate'] = $todate->format('Y-m-d');
         }
         $url = 'email';
         if (count($data) > 0) {
